@@ -1,5 +1,8 @@
 package com.pankal.task;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,9 +30,14 @@ public class TaskController {
 		taskRepository.save(task);
 	}
 
-	@GetMapping
+	@GetMapping("/all")
 	public List<Task> getTasks() {
 		return taskRepository.findAll();
+	}
+
+	@GetMapping("/test")
+	public JsonNode doTest() {
+		return JsonNodeFactory.instance.objectNode().put("response", "test resp 34");
 	}
 
 	@PutMapping("/{id}")
