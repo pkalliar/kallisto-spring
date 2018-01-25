@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/babadoo")
+@RequestMapping("/api/login")
 @CrossOrigin("*")
 public class AuthenticationController {
 
