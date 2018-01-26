@@ -9,10 +9,10 @@ import java.util.stream.Stream;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-	@Query("select u from items u where LOWER(u.name) like lower(concat('%', :value, '%'))")
-	List<Item> findByNameOrCode(@Param("value") String value);
-
-	@Query("select u from items u where LOWER(u.name) like lower(concat('%', :value, '%'))")
-	Stream<Item> findByCriteria(@Param("value") String value);
+//	@Query("select u from items u where LOWER(u.name) like lower(concat('%', :value, '%'))")
+//	List<Item> findByNameOrCode(@Param("value") String value);
+//
+//	@Query("select u from items u where LOWER(u.name) like lower(concat('%', :value, '%'))")
+//	Stream<Item> findByCriteria(@Param("value") String value);
 
 }

@@ -61,49 +61,11 @@ public class ItemController {
 	public List<Item> searchContacts(@PathVariable String name) {
 		log.info("in getContacts search for " + name);
 
-//		return null;
-		return itemRepository.findByNameOrCode(name);
+		return null;
+//		return itemRepository.findByNameOrCode(name);
 
 	}
 
-	@GetMapping("/filter/{criteria}")
-	@Transactional(readOnly = true)
-	public List<Item> loadContacts(@PathVariable String criteria) {
-		log.info("in getContacts filter for " + criteria);
-		JsonNode crit;
-		List<Item> results = new ArrayList<>();
-		try {
-			crit = m.readTree(criteria);
-			if(crit.isArray()) {
-				if(((ArrayNode)crit).size() > 0) {
-					Iterator<JsonNode> it = ((ArrayNode) crit).elements();
-//				int ind = 0;
-
-					while (it.hasNext()) {
-						ObjectNode tdata = (ObjectNode) it.next();
-						log.info("filter: " + tdata);
-						Stream<Item> stream = itemRepository.findByCriteria(tdata.get("name").textValue());
-						stream.forEach(c -> results.add(c));
-					}
-					return results;
-				}else{
-					PageRequest request = new PageRequest(0, 40);
-					Page page = itemRepository.findAll(request);
-					return page.getContent();
-				}
-
-
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-
-
-//		return null;
-		return itemRepository.findByNameOrCode(criteria);
-	}
 
 	@GetMapping("/{id}")
 	public Item getContact(@PathVariable String id) {
