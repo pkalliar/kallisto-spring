@@ -40,11 +40,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 		http
 				.csrf().disable()
-				.authorizeRequests()
-				.requestMatchers(CorsUtils::isCorsRequest).permitAll()
-				.anyRequest().authenticated()
-				.and().httpBasic()
-				.and().addFilterBefore(new WebSecurityCorsFilter(), ChannelProcessingFilter.class)
+//				.authorizeRequests()
+//				.requestMatchers(CorsUtils::isCorsRequest).permitAll()
+//				.anyRequest().authenticated()
+//				.and().httpBasic()
+//				.and().addFilterBefore(new WebSecurityCorsFilter(), ChannelProcessingFilter.class)
 //				.addFilter(new JWTAuthenticationFilter(authenticationManager()))
 //				.addFilter(new JWTAuthorizationFilter(authenticationManager()))
 				// this disables session creation on Spring Security
