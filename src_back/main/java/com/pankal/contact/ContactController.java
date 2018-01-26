@@ -92,7 +92,7 @@ public class ContactController {
 
 		Contact res = new Contact(UUID.randomUUID());
 
-//		Contact res = contactRepository.save(contact);
+//		Item res = contactRepository.save(contact);
 //		ObjectNode res = JsonNodeFactory.instance.objectNode().put("response", "test resp 34");
 		return res;
 	}
@@ -100,8 +100,8 @@ public class ContactController {
 	@PutMapping("/{id}")
 	public Contact editContact(@PathVariable String id, @RequestBody Contact contact) {
 
-//		Contact existingContact = (Contact) contactRepository.findOne(id);
-//		Assert.notNull(existingContact, "Contact not found");
+//		Item existingContact = (Item) contactRepository.findOne(id);
+//		Assert.notNull(existingContact, "Item not found");
 //		existingContact.setLegal_name(contact.getLegal_name());
 //		contactRepository.save(existingContact);
 

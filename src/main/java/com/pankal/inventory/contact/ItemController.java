@@ -1,22 +1,17 @@
-package com.pankal.contact;
+package com.pankal.inventory.contact;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.pankal.security.AuthenticationController;
-import com.pankal.task.Task;
-import com.pankal.task.TaskRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,53 +26,52 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/api/contacts")
+@RequestMapping("/api/items")
 @CrossOrigin("*")
-public class ContactController {
+public class ItemController {
 
-	private ContactRepository contactRepository;
+	private ItemRepository itemRepository;
 	private static ObjectMapper m = null;
 
-	private static final Logger log = LoggerFactory.getLogger(ContactController.class);
+	private static final Logger log = LoggerFactory.getLogger(ItemController.class);
 
-	public ContactController(ContactRepository contactRepository) {
-		this.contactRepository = contactRepository;
+	public ItemController(ItemRepository itemRepository) {
+		this.itemRepository = itemRepository;
 		m = new ObjectMapper();
 	}
 
 
 
 	@GetMapping
-	public List<Contact> getContacts() {
-		log.info("in getContacts");
+	public List<Item> getItems() {
+		log.info("in getItems");
 		PageRequest request = new PageRequest(0,40);
-		Page page = contactRepository.findAll(request);
+		Page page = itemRepository.findAll(request);
 
 		return page.getContent();
 
-//		return contactRepository.findAll(request);
+//		return itemRepository.findAll(request);
 	}
 
 	@GetMapping("/search/{name}")
-	public List<Contact> searchContacts(@PathVariable String name) {
+	public List<Item> searchContacts(@PathVariable String name) {
 		log.info("in getContacts search for " + name);
 
 //		return null;
-		return contactRepository.findByNameOrCode(name);
+		return itemRepository.findByNameOrCode(name);
 
 	}
 
 	@GetMapping("/filter/{criteria}")
 	@Transactional(readOnly = true)
-	public List<Contact> loadContacts(@PathVariable String criteria) {
+	public List<Item> loadContacts(@PathVariable String criteria) {
 		log.info("in getContacts filter for " + criteria);
 		JsonNode crit;
-		List<Contact> results = new ArrayList<>();
+		List<Item> results = new ArrayList<>();
 		try {
 			crit = m.readTree(criteria);
 			if(crit.isArray()) {
@@ -88,13 +82,13 @@ public class ContactController {
 					while (it.hasNext()) {
 						ObjectNode tdata = (ObjectNode) it.next();
 						log.info("filter: " + tdata);
-						Stream<Contact> stream = contactRepository.findByCriteria(tdata.get("name").textValue());
+						Stream<Item> stream = itemRepository.findByCriteria(tdata.get("name").textValue());
 						stream.forEach(c -> results.add(c));
 					}
 					return results;
 				}else{
 					PageRequest request = new PageRequest(0, 40);
-					Page page = contactRepository.findAll(request);
+					Page page = itemRepository.findAll(request);
 					return page.getContent();
 				}
 
@@ -108,71 +102,71 @@ public class ContactController {
 
 
 //		return null;
-		return contactRepository.findByNameOrCode(criteria);
+		return itemRepository.findByNameOrCode(criteria);
 	}
 
 	@GetMapping("/{id}")
-	public Contact getContact(@PathVariable String id) {
+	public Item getContact(@PathVariable String id) {
 
 		log.info("in getContact with id " + id);
 		try {
 			UUID uuid = UUID.fromString(id);
 			PageRequest request = new PageRequest(0,40);
-//		Page page = contactRepository.findAll(request);
+//		Page page = itemRepository.findAll(request);
 
-			Example<Contact> example = Example.of(new Contact(uuid));
-			Contact res = contactRepository.findOne(example);
+			Example<Item> example = Example.of(new Item(uuid));
+			Item res = itemRepository.findOne(example);
 			if(res != null)
-				return contactRepository.findOne(example);
+				return itemRepository.findOne(example);
 			else
 				return example.getProbe();
 		}catch (IllegalArgumentException e){
-			Contact res = new Contact();
+			Item res = new Item();
 			return res;
 		}
 
 	}
 
 	@PostMapping
-	public Contact generateContactUUID(@RequestBody Contact contact) {
-		log.info("Received POST with contact " + contact);
+	public Item generateContactUUID(@RequestBody Item item) {
+		log.info("Received POST with item " + item);
 
-		Contact res = new Contact(UUID.randomUUID());
+		Item res = new Item(UUID.randomUUID());
 
-//		Item res = contactRepository.save(contact);
+//		Item res = itemRepository.save(item);
 //		ObjectNode res = JsonNodeFactory.instance.objectNode().put("response", "test resp 34");
 		return res;
 	}
 
 	@PutMapping("/{id}")
-	public Contact editContact(@PathVariable String id, @RequestBody Contact contact) {
+	public Item editContact(@PathVariable String id, @RequestBody Item item) {
 
-//		Item existingContact = (Item) contactRepository.findOne(id);
+//		Item existingContact = (Item) itemRepository.findOne(id);
 //		Assert.notNull(existingContact, "Item not found");
-//		existingContact.setLegal_name(contact.getLegal_name());
-//		contactRepository.save(existingContact);
+//		existingContact.setLegal_name(item.getLegal_name());
+//		itemRepository.save(existingContact);
 
 		log.info("in putContact with id " + id);
 		try {
 			UUID uuid = UUID.fromString(id);
 		}catch (IllegalArgumentException e){
-			log.info("Saving new contact.");
+			log.info("Saving new item.");
 		}
 
-		log.info("Received PUT with contact " + contact);
+		log.info("Received PUT with item " + item);
 
-		Contact res = contactRepository.save(contact);
+		Item res = itemRepository.save(item);
 		return res;
 	}
 
 	@DeleteMapping("/{id}")
 	public JsonNode deleteTask(@PathVariable UUID id) {
 
-		Example<Contact> example = Example.of(new Contact(id));
-		Contact res = contactRepository.findOne(example);
+		Example<Item> example = Example.of(new Item(id));
+		Item res = itemRepository.findOne(example);
 		ObjectNode response = JsonNodeFactory.instance.objectNode();
 		if(res != null) {
-			contactRepository.delete(res);
+			itemRepository.delete(res);
 			return response.put("response", "success");
 		}else
 			return response.put("response", "failure");

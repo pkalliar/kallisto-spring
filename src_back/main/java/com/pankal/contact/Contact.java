@@ -63,7 +63,7 @@ public class Contact {
 
 	@Override
 	public String toString() {
-		return "Contact{" +
+		return "Item{" +
 				"id=" + id +
 				", code='" + code + '\'' +
 				", legal_name='" + legal_name + '\'' +

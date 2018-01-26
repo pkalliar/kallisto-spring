@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ContactRepository extends JpaRepository<Contact, Long> {
 
-	@Query("select u from Contact u where LOWER(u.legal_name) like lower(concat('%', :value, '%')) or" +
+	@Query("select u from Item u where LOWER(u.legal_name) like lower(concat('%', :value, '%')) or" +
 			" lower(u.code) like lower(concat('%', :value, '%'))")
 	List<Contact> findByNameOrCode(@Param("value") String value);
 

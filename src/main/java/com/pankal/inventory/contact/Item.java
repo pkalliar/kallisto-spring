@@ -1,4 +1,4 @@
-package com.pankal.contact;
+package com.pankal.inventory.contact;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -7,9 +7,7 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -17,9 +15,9 @@ import javax.persistence.Table;
  */
 
 
-@Table(name="contacts", schema="comm")
+@Table(name="items", schema="inventory")
 @Entity
-public class Contact {
+public class Item {
 
 	@Id
 	@GeneratedValue(generator = "uuid2")
@@ -27,12 +25,11 @@ public class Contact {
 	@Column(name = "id", columnDefinition = "BINARY(16)")
 	private UUID id;
 
-	private String code;
-	private String legal_name;
+	private String name;
 
-	public Contact() {}
+	public Item() {}
 
-	public Contact(UUID id) {
+	public Item(UUID id) {
 		this.id = id;
 	}
 
@@ -44,29 +41,21 @@ public class Contact {
 		this.id = id;
 	}
 
-	public String getCode() {
-		return code;
+	public String getName() {
+		return name;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setName(String code) {
+		this.name = code;
 	}
 
-	public String getLegal_name() {
-		return legal_name;
-	}
-
-	public void setLegal_name(String legal_name) {
-		this.legal_name = legal_name;
-	}
 
 
 	@Override
 	public String toString() {
 		return "Item{" +
 				"id=" + id +
-				", code='" + code + '\'' +
-				", legal_name='" + legal_name + '\'' +
+				", name='" + name + '\'' +
 				'}';
 	}
 }
