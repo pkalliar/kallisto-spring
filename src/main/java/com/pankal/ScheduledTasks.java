@@ -19,5 +19,6 @@ public class ScheduledTasks {
 	@Scheduled(fixedRate = 600000)
 	public void reportCurrentTime() {
 		log.info("The time is now {}", dateFormat.format(new Date()));
+		Skroutz.doit();
 	}
 }
