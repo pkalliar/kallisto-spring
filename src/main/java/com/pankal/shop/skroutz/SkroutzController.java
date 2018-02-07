@@ -33,7 +33,8 @@ public class SkroutzController {
 	@GetMapping("/search/{toSearch}")
 	public JsonNode search(@PathVariable String toSearch) {
 		log.info("in getContact with id " + toSearch);
-		return JsonNodeFactory.instance.objectNode().put("result", "to-do skroutz search");
+		JsonNode res = Skroutz.search(toSearch);
+		return res;
 	}
 
 }

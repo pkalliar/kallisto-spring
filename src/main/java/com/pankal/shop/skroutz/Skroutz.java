@@ -1,6 +1,7 @@
-package com.pankal;
+package com.pankal.shop.skroutz;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.pankal.Application;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ public class Skroutz {
 		ResponseEntity<JsonNode> quote =
 				restTemplate.exchange(url1, HttpMethod.GET, prepareRequest(), JsonNode.class);
 
-//		log.info("quote is " + quote.getBody());
+		log.info("quote is " + quote.getBody());
 		return quote.getBody();
 	}
 }
