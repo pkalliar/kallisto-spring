@@ -32,36 +32,31 @@ import java.util.stream.Stream;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/users")
-public class UserController {
+@RequestMapping("/api/persons")
+public class PersonController {
 
-    private UserRepository userRepository;
+    private PersonRepository personRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	private static ObjectMapper m = null;
 
-	private static final Logger log = LoggerFactory.getLogger(UserController.class);
+	private static final Logger log = LoggerFactory.getLogger(PersonController.class);
 
 
-	public UserController(UserRepository userRepository,
-                          BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
+	public PersonController(PersonRepository personRepository,
+							BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.personRepository = personRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		m = new ObjectMapper();
     }
 
-    @PostMapping("/sign-up")
-    public void signUp(@RequestBody User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-    }
 
 	@GetMapping("/filter/{criteria}")
 	@Transactional(readOnly = true)
-	public List<User> load(@PathVariable String criteria) {
-		log.info("in getContacts filter for " + criteria);
+	public List<Person> load(@PathVariable String criteria) {
+		log.info("in get filter for " + criteria);
 		JsonNode crit;
-		List<User> results = new ArrayList<>();
+		List<Person> results = new ArrayList<>();
 		try {
 			crit = m.readTree(criteria);
 			if(crit.isArray()) {
@@ -72,13 +67,13 @@ public class UserController {
 					while (it.hasNext()) {
 						ObjectNode tdata = (ObjectNode) it.next();
 						log.info("filter: " + tdata);
-						Stream<User> stream = userRepository.findByCriteria(tdata.get("name").textValue());
+						Stream<Person> stream = personRepository.findByCriteria(tdata.get("name").textValue());
 						stream.forEach(c -> results.add(c));
 					}
 					return results;
 				}else{
 					PageRequest request = new PageRequest(0, 40);
-					Page page = userRepository.findAll(request);
+					Page page = personRepository.findAll(request);
 					return page.getContent();
 				}
 
@@ -90,11 +85,11 @@ public class UserController {
 		}
 
 		return null;
-		//return userRepository.findByCriteria(criteria);
+		//return personRepository.findByCriteria(criteria);
 	}
 
 	@GetMapping("/{id}")
-	public User get(@PathVariable String id) {
+	public Person get(@PathVariable String id) {
 
 		log.info("in getAffair with id " + id);
 		try {
@@ -102,14 +97,14 @@ public class UserController {
 			PageRequest request = new PageRequest(0,40);
 //		Page page = affairRepository.findAll(request);
 
-			Example<User> example = Example.of(new User(uuid));
-			User res = userRepository.findOne(example);
+			Example<Person> example = Example.of(new Person(uuid));
+			Person res = personRepository.findOne(example);
 			if(res != null)
-				return userRepository.findOne(example);
+				return personRepository.findOne(example);
 			else
 				return example.getProbe();
 		}catch (IllegalArgumentException e){
-			User res = new User();
+			Person res = new Person();
 			return res;
 		}
 
@@ -127,7 +122,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}")
-	public User edit(@PathVariable String id, @RequestBody User entity) {
+	public Person edit(@PathVariable String id, @RequestBody Person entity) {
 
 //		Folder existingContact = (Folder) affairRepository.findOne(id);
 //		Assert.notNull(existingContact, "Folder not found");
@@ -143,18 +138,18 @@ public class UserController {
 
 		log.info("Received PUT with user " + entity);
 
-		User res = userRepository.save(entity);
+		Person res = personRepository.save(entity);
 		return res;
 	}
 
 	@DeleteMapping("/{id}")
 	public JsonNode delete(@PathVariable UUID id) {
 
-		Example<User> example = Example.of(new User(id));
-		User res = userRepository.findOne(example);
+		Example<Person> example = Example.of(new Person(id));
+		Person res = personRepository.findOne(example);
 		ObjectNode response = JsonNodeFactory.instance.objectNode();
 		if(res != null) {
-			userRepository.delete(res);
+			personRepository.delete(res);
 			return response.put("response", "success");
 		}else
 			return response.put("response", "failure");

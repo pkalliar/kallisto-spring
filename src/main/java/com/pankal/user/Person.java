@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 
 
-@Table(name="person", schema="security")
+@Table(name="persons", schema="security")
 @Entity
 public class Person {
 
@@ -28,10 +28,19 @@ public class Person {
 	private String lastname;
 	private String mobile;
 
+	public Person() {}
+
+	public Person(UUID id) {
+		this.id = id;
+	}
+
 	public UUID getId() {
 		return id;
 	}
 
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
 	public String getFirstname() {
 		return firstname;

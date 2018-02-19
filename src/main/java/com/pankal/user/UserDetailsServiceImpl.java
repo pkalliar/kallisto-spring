@@ -1,6 +1,5 @@
 package com.pankal.user;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,18 +10,18 @@ import static java.util.Collections.emptyList;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	private ApplicationUserRepository applicationUserRepository;
+	private UserRepository userRepository;
 
-	public UserDetailsServiceImpl(ApplicationUserRepository applicationUserRepository) {
-		this.applicationUserRepository = applicationUserRepository;
+	public UserDetailsServiceImpl(UserRepository userRepository) {
+		this.userRepository = userRepository;
 	}
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		ApplicationUser applicationUser = applicationUserRepository.findByUsername(username);
-		if (applicationUser == null) {
+		User user = userRepository.findByUsername(username);
+		if (user == null) {
 			throw new UsernameNotFoundException(username);
 		}
-		return new User(applicationUser.getUsername(), applicationUser.getPassword(), emptyList());
+		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), emptyList());
 	}
 
 }

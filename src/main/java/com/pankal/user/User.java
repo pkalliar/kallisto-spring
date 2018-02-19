@@ -2,6 +2,9 @@
 package com.pankal.user;
 
 import javax.persistence.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -9,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Table(name="users", schema="security")
 @Entity
-public class ApplicationUser {
+public class User {
 
 	@Id
 	@GeneratedValue(generator = "uuid2")
@@ -19,6 +22,14 @@ public class ApplicationUser {
 
     private String username;
     private String password;
+    private String apikey;
+    private LocalDateTime apikey_expires;
+
+	public User() {}
+
+	public User(UUID id) {
+		this.id = id;
+	}
 
     public UUID getId() {
         return id;
@@ -39,4 +50,20 @@ public class ApplicationUser {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public String getApikey() {
+		return apikey;
+	}
+
+	public void setApikey(String apikey) {
+		this.apikey = apikey;
+	}
+
+	public LocalDateTime getApikey_expires() {
+		return apikey_expires;
+	}
+
+	public void setApikey_expires(LocalDateTime apikey_expires) {
+		this.apikey_expires = apikey_expires;
+	}
 }
