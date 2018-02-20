@@ -1,0 +1,21 @@
+curl -H "Content-Type: application/json" -X POST -d "{\"description\" : \" Buy some milk(shake) \"}"  http://localhost:8080/tasks
+
+curl -H "Content-Type: application/json" -X PUT -d "{    \"description\": \"Buy some milk\"}"  http://localhost:8080/tasks/1
+
+
+# registers a new user
+curl -H "Content-Type: application/json" -X POST -d "{ \"username\": \"admin1\", \"password\": \"password\" }" http://localhost:8080/users/sign-up
+
+
+# logs into the application (JWT is generated)
+curl -i -H "Content-Type: application/json" -X POST -d "{ \"username\": \"admin\", \"password\": \"password\"}" http://localhost:8080/login
+
+
+
+curl -H "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTUxMTA4MTQ5M30.B1QfL9reg4NnALhq0IIDcTTOssB-xSC0YYS4FWKYOM2MiDASVpDnDijqBjHTFNeK2KFKort09Ew6VjzCStw35Q" http://localhost:8080/tasks
+
+
+curl -i -H "Content-Type: application/json" http://localhost:8090/tasks/test
+
+
+curl -i -H "Content-Type: application/json" https://kallisto-backend.herokuapp.com/tasks/test
