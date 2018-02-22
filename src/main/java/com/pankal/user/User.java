@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.pankal.utilities.LocalDateTimeConverter;
 import org.hibernate.annotations.GenericGenerator;
 
 
@@ -23,6 +24,8 @@ public class User {
     private String username;
     private String password;
     private String apikey;
+
+	@Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime apikey_expires;
 
 	public User() {}
