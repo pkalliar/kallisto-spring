@@ -5,9 +5,11 @@ import javax.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import com.pankal.utilities.LocalDateTimeConverter;
+import com.pankal.utilities.ZonedDateTimeConverter;
 import org.hibernate.annotations.GenericGenerator;
 
 
@@ -25,8 +27,8 @@ public class User {
     private String password;
     private String apikey;
 
-	@Convert(converter = LocalDateTimeConverter.class)
-    private LocalDateTime apikey_expires;
+	@Convert(converter = ZonedDateTimeConverter.class)
+    private ZonedDateTime apikey_expires;
 
 	public User() {}
 
@@ -62,11 +64,11 @@ public class User {
 		this.apikey = apikey;
 	}
 
-	public LocalDateTime getApikey_expires() {
+	public ZonedDateTime getApikey_expires() {
 		return apikey_expires;
 	}
 
-	public void setApikey_expires(LocalDateTime apikey_expires) {
+	public void setApikey_expires(ZonedDateTime apikey_expires) {
 		this.apikey_expires = apikey_expires;
 	}
 }

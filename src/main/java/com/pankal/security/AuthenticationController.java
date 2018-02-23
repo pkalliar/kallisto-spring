@@ -18,6 +18,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @RestController
@@ -53,8 +54,8 @@ public class AuthenticationController {
 				return example.getProbe();
 			}else {
 				apikey = Utilities.digest(msgDigestSHA256, (user.getUsername() + user.getPassword() + new Date().getTime()));
-				LocalDateTime expDate = LocalDateTime.now().plusMinutes(45);
-				apikey_expires = expDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+				ZonedDateTime expDate = ZonedDateTime.now().plusMinutes(45);
+//				apikey_expires = expDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 				res.setApikey(apikey);
 				res.setApikey_expires(expDate);
 				userRepository.save(res);
