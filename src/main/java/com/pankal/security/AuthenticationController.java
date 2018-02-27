@@ -22,7 +22,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/api/login")
+@RequestMapping("/api/")
 @CrossOrigin("*")
 public class AuthenticationController {
 
@@ -36,10 +36,8 @@ public class AuthenticationController {
 	}
 
 //	@CrossOrigin("*")
-	@PostMapping
+	@PostMapping("/login")
 	public User doLogin(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
-
-
 	{
 		log.info("do login for " + user.getUsername() + " -- " +  user.getPassword() + " from " + request.getRemoteHost());
 
@@ -63,6 +61,11 @@ public class AuthenticationController {
 			}
 
 //		return contactRepository.findAll(request);
+	}
+
+	@GetMapping("/refresh")
+	public JsonNode doRefresh() {
+		return JsonNodeFactory.instance.objectNode().put("response", "test resp 34");
 	}
 
 }
