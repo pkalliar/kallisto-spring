@@ -3,6 +3,7 @@ package com.pankal.security;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.pankal.contact.ContactRepository;
+import com.pankal.inventory.contact.Item;
 import com.pankal.user.Person;
 import com.pankal.user.User;
 import com.pankal.user.UserRepository;
@@ -20,9 +21,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/login")
+@RequestMapping("/api/authenticate")
 @CrossOrigin("*")
 public class AuthenticationController {
 
@@ -36,7 +38,7 @@ public class AuthenticationController {
 	}
 
 //	@CrossOrigin("*")
-	@PostMapping
+	@PostMapping("/login")
 	public User doLogin(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
 
 
@@ -63,6 +65,17 @@ public class AuthenticationController {
 			}
 
 //		return contactRepository.findAll(request);
+	}
+
+	@GetMapping("/refresh")
+	public void refresh(HttpServletRequest request, HttpServletResponse response) {
+
+		String apikey = request.getHeader("apikey");
+		log.info("refreshing for " + apikey);
+
+		return;
+//		return itemRepository.findByNameOrCode(name);
+
 	}
 
 }
