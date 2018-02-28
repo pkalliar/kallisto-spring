@@ -3,6 +3,7 @@ package com.pankal.security;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.pankal.contact.ContactRepository;
+import com.pankal.inventory.contact.Item;
 import com.pankal.user.Person;
 import com.pankal.user.User;
 import com.pankal.user.UserRepository;
@@ -20,9 +21,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/authenticate")
 @CrossOrigin("*")
 public class AuthenticationController {
 
@@ -35,9 +37,11 @@ public class AuthenticationController {
 		msgDigestSHA256 = MessageDigest.getInstance("SHA-256");
 	}
 
-//	@CrossOrigin("*")
+	//	@CrossOrigin("*")
 	@PostMapping("/login")
 	public User doLogin(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
+
+
 	{
 		log.info("do login for " + user.getUsername() + " -- " +  user.getPassword() + " from " + request.getRemoteHost());
 
@@ -46,26 +50,32 @@ public class AuthenticationController {
 		String apikey = null;
 
 
-			User res = userRepository.findByUsername(user.getUsername());
-			if( res == null){
-				response.addHeader("result", "app-error");
-				return example.getProbe();
-			}else {
-				apikey = Utilities.digest(msgDigestSHA256, (user.getUsername() + user.getPassword() + new Date().getTime()));
-				ZonedDateTime expDate = ZonedDateTime.now().plusMinutes(45);
+		User res = userRepository.findByUsername(user.getUsername());
+		if( res == null){
+			response.addHeader("result", "app-error");
+			return example.getProbe();
+		}else {
+			apikey = Utilities.digest(msgDigestSHA256, (user.getUsername() + user.getPassword() + new Date().getTime()));
+			ZonedDateTime expDate = ZonedDateTime.now().plusMinutes(45);
 //				apikey_expires = expDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-				res.setApikey(apikey);
-				res.setApikey_expires(expDate);
-				userRepository.save(res);
-				return res;
-			}
+			res.setApikey(apikey);
+			res.setApikey_expires(expDate);
+			userRepository.save(res);
+			return res;
+		}
 
 //		return contactRepository.findAll(request);
 	}
 
 	@GetMapping("/refresh")
-	public JsonNode doRefresh() {
-		return JsonNodeFactory.instance.objectNode().put("response", "test resp 34");
+	public void refresh(HttpServletRequest request, HttpServletResponse response) {
+
+		String apikey = request.getHeader("apikey");
+		log.info("refreshing for " + apikey);
+
+		return;
+//		return itemRepository.findByNameOrCode(name);
+
 	}
 
 }
