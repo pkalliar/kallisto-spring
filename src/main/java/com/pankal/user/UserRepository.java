@@ -10,6 +10,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUsername(String username);
 
+	User findByApikey(String apikey);
+
 	@Query("select u from User u where LOWER(u.username) like lower(concat('%', :value, '%')))")
 	Stream<User> findByCriteria(@Param("value") String value);
 
