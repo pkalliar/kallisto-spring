@@ -2,6 +2,7 @@ package com.pankal.security;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.pankal.contact.ContactRepository;
 import com.pankal.inventory.contact.Item;
 import com.pankal.user.Person;
@@ -68,12 +69,14 @@ public class AuthenticationController {
 	}
 
 	@GetMapping("/refresh")
-	public void refresh(HttpServletRequest request, HttpServletResponse response) {
+	public String refresh(HttpServletRequest request, HttpServletResponse response) {
 
 		String apikey = request.getHeader("apikey");
 		log.info("refreshing for " + apikey);
 
-		return;
+		ObjectNode res = JsonNodeFactory.instance.objectNode().put("response", "test resp 34");
+
+		return res.toString();
 //		return itemRepository.findByNameOrCode(name);
 
 	}

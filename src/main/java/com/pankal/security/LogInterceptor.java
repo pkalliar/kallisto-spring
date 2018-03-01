@@ -43,6 +43,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 		}else {
 			ZonedDateTime expDate = ZonedDateTime.now().plusMinutes(45);
 //			long apikey_expires = expDate.toInstant().toEpochMilli();
+			response.addHeader("access-control-expose-headers", "apikey_expires");
 			response.addHeader("apikey_expires", expDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
 			res.setApikey_expires(expDate);
 			userRepository.save(res);
@@ -62,7 +63,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 		System.out.println("\n-------- LogInterception.postHandle --- ");
 		System.out.println("Request URL: " + request.getRequestURL());
 
-		response.addHeader("apikey", "here goes the apikey");
+//		response.addHeader("apikey", "here goes the apikey");
 
 		// You can add attributes in the modelAndView
 		// and use that in the view page
