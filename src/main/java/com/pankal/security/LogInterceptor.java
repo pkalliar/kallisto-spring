@@ -4,6 +4,7 @@ import com.pankal.user.User;
 import com.pankal.user.UserRepository;
 import com.pankal.utilities.Utilities;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,6 +39,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 
 		User res = userRepository.findByApikey(apikey);
 		if( res == null){
+			response.addHeader("access-control-expose-headers", "result");
 			response.addHeader("result", "app-error");
 //			return false;
 		}else {
@@ -63,7 +65,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 		System.out.println("\n-------- LogInterception.postHandle --- ");
 		System.out.println("Request URL: " + request.getRequestURL());
 
-//		response.addHeader("apikey", "here goes the apikey");
+		response.addHeader("apikey", "here goes the apikey");
 
 		// You can add attributes in the modelAndView
 		// and use that in the view page
@@ -80,6 +82,9 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 		System.out.println("End Time: " + endTime);
 
 		System.out.println("Time Taken: " + (endTime - startTime));
+
+		response.addCookie(new Cookie("anme", "aval"));
+
 	}
 
 }
