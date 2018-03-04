@@ -21,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -71,6 +72,8 @@ public class AuthenticationController {
 	@GetMapping("/refresh")
 	public String refresh(HttpServletRequest request, HttpServletResponse response) {
 
+
+
 		String apikey = request.getHeader("apikey");
 		log.info("refreshing for " + apikey);
 
@@ -81,6 +84,36 @@ public class AuthenticationController {
 
 	}
 
+
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+
+		String apikey = request.getHeader("apikey");
+		log.info("logging out for " + apikey);
+
+		User res = userRepository.findByApikey(apikey);
+		if( res == null){
+			response.addHeader("access-control-expose-headers", "result");
+			response.addHeader("result", "app-error");
+			return "";
+		}else {
+			ZonedDateTime expDate = ZonedDateTime.now().minusSeconds(1);
+//			long apikey_expires = expDate.toInstant().toEpochMilli();
+			response.addHeader("access-control-expose-headers", "apikey_expires, apikey");
+			response.setHeader("apikey_expires", expDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+			response.addHeader("apikey", "-");
+			res.setApikey_expires(expDate);
+			res.setApikey("-");
+			userRepository.save(res);
+			return "";
+		}
+
+//		ObjectNode res = JsonNodeFactory.instance.objectNode().put("response", "test resp 34");
+
+//		return res.toString();
+//		return itemRepository.findByNameOrCode(name);
+
+	}
 
 
 }
