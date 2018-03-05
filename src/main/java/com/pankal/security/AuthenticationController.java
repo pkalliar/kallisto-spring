@@ -41,10 +41,7 @@ public class AuthenticationController {
 
 	//	@CrossOrigin("*")
 	@PostMapping("/login")
-	public User doLogin(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
-
-
-	{
+	public String doLogin(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
 		log.info("do login for " + user.getUsername() + " -- " +  user.getPassword() + " from " + request.getRemoteHost());
 
 		Example<User> example = Example.of(user);
@@ -55,7 +52,7 @@ public class AuthenticationController {
 		User res = userRepository.findByUsername(user.getUsername());
 		if( res == null){
 			response.addHeader("result", "app-error");
-			return example.getProbe();
+			return "";
 		}else {
 			apikey = Utilities.digest(msgDigestSHA256, (user.getUsername() + user.getPassword() + new Date().getTime()));
 			ZonedDateTime expDate = ZonedDateTime.now().plusMinutes(45);
@@ -63,7 +60,13 @@ public class AuthenticationController {
 			res.setApikey(apikey);
 			res.setApikey_expires(expDate);
 			userRepository.save(res);
-			return res;
+
+			ObjectNode clientResult = JsonNodeFactory.instance.objectNode()
+					.put("apikey", apikey)
+					.put("apikey_expires", expDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
+					.put("username", res.getUsername());
+
+			return clientResult.toString();
 		}
 
 //		return contactRepository.findAll(request);

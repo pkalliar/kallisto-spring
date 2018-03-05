@@ -70,8 +70,8 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 
-		User res = userRepository.findByApikey(apikey);
-		if( res == null){
+		User user = userRepository.findByApikey(apikey);
+		if( user == null){
 			response.addHeader("access-control-expose-headers", "result");
 			response.addHeader("result", "app-error");
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, "no valid apikey");
@@ -81,8 +81,9 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 //			long apikey_expires = expDate.toInstant().toEpochMilli();
 			response.addHeader("access-control-expose-headers", "apikey_expires");
 			response.addHeader("apikey_expires", expDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-			res.setApikey_expires(expDate);
-			userRepository.save(res);
+			user.setApikey_expires(expDate);
+			userRepository.save(user);
+			request.setAttribute("user", user.getUsername());
 			return true;
 		}
 
