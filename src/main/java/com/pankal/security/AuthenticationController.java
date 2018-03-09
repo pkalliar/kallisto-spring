@@ -75,8 +75,6 @@ public class AuthenticationController {
 	@GetMapping("/refresh")
 	public String refresh(HttpServletRequest request, HttpServletResponse response) {
 
-
-
 		String apikey = request.getHeader("apikey");
 		log.info("refreshing for " + apikey);
 
