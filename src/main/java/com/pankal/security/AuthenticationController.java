@@ -48,11 +48,12 @@ public class AuthenticationController {
 		long apikey_expires = 0;
 		String apikey = null;
 
-
-		User res = userRepository.findByUsername(user.getUsername());
+		ObjectNode clientResult = JsonNodeFactory.instance.objectNode();
+		User res = userRepository.findByUsernamePassword(user.getUsername(), user.getPassword());
 		if( res == null){
 			response.addHeader("result", "app-error");
-			return "";
+
+			clientResult.put("result", "No user found");
 		}else {
 			apikey = Utilities.digest(msgDigestSHA256, (user.getUsername() + user.getPassword() + new Date().getTime()));
 			ZonedDateTime expDate = ZonedDateTime.now().plusMinutes(45);
@@ -61,13 +62,13 @@ public class AuthenticationController {
 			res.setApikey_expires(expDate);
 			userRepository.save(res);
 
-			ObjectNode clientResult = JsonNodeFactory.instance.objectNode()
-					.put("apikey", apikey)
+			clientResult.put("apikey", apikey)
 					.put("apikey_expires", expDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
 					.put("username", res.getUsername());
 
-			return clientResult.toString();
+
 		}
+		return clientResult.toString();
 
 //		return contactRepository.findAll(request);
 	}
