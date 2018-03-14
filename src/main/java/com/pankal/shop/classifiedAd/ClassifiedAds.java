@@ -1,4 +1,4 @@
-package com.pankal.inventory;
+package com.pankal.shop.classifiedAd;
 
 import org.hibernate.annotations.GenericGenerator;
 

@@ -1,7 +1,6 @@
-package com.pankal.inventory;
+package com.pankal.shop.classifiedAd;
 
-import com.pankal.inventory.car.VehicleModel;
-
+import com.pankal.shop.classifiedAd.ClassifiedAds;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
